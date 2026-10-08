@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="night">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dying Light 2: Stay Human — Официальный фан-портал | Курсовой проект</title>
+    <meta name="description" content="Информационный портал по игре Dying Light 2: Stay Human. Механики паркура и боевки, фракции Вилледора, интерактивный бестиарий заражённых и системные требования.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,700&family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-night">
+
+    <!-- Flash Effect for Night Transition -->
+    <div id="uv-flash" class="uv-flash" aria-hidden="true"></div>
+
+    <!-- Sticky Header -->
+    <header id="main-header" class="site-header">
+        <div class="header-container container">
+            <a href="#hero" class="logo-link" aria-label="На главную">
+                <div class="logo-badge">DL2</div>
+                <div class="logo-text">
+                    <span class="logo-title">DYING LIGHT 2</span>
+                    <span class="logo-subtitle">STAY HUMAN</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="main-nav" id="main-nav" aria-label="Основная навигация">
+                <ul class="nav-list">
+                    <li><a href="#hero" class="nav-link active"><i class="fa-solid fa-house"></i> Главная</a></li>
+                    <li><a href="#about" class="nav-link"><i class="fa-solid fa-crosshairs"></i> Об игре</a></li>
+                    <li><a href="#mechanics" class="nav-link"><i class="fa-solid fa-person-running"></i> Механики</a></li>
+                    <li><a href="#factions" class="nav-link"><i class="fa-solid fa-shield-halved"></i> Фракции</a></li>
+                    <li><a href="#bestiary" class="nav-link"><i class="fa-solid fa-skull"></i> Бестиарий</a></li>
+                    <li><a href="#requirements" class="nav-link"><i class="fa-solid fa-microchip"></i> Требования</a></li>
+                </ul>
+            </nav>
+
+            <!-- Actions: Day/Night Toggle & Mobile Burger -->
+            <div class="header-actions">
+                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Переключить время суток: День / Ночь" title="Сменить цикл суток">
+                    <span class="toggle-icon-wrap">
+                        <i class="fa-solid fa-moon icon-night"></i>
+                        <i class="fa-solid fa-sun icon-day"></i>
+                    </span>
+                    <span class="toggle-label" id="toggle-label">НОЧЬ</span>
+                    <span class="uv-indicator" title="UV защита активна">UV</span>
+                </button>
+
+                <button id="mobile-burger" class="burger-btn" aria-label="Открыть мобильное меню" aria-expanded="false" aria-controls="mobile-drawer">
+                    <span class="burger-bar"></span>
+                    <span class="burger-bar"></span>
+                    <span class="burger-bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer Navigation -->
+    <div id="mobile-overlay" class="mobile-overlay" aria-hidden="true"></div>
+    <aside id="mobile-drawer" class="mobile-drawer" aria-label="Мобильное меню">
+        <div class="mobile-drawer-header">
+            <div class="logo-text">
+                <span class="logo-title">DYING LIGHT 2</span>
+                <span class="logo-subtitle">МЕНЮ ВЫЖИВШЕГО</span>
+            </div>
+            <button id="mobile-close" class="mobile-close-btn" aria-label="Закрыть меню">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <nav class="mobile-nav">
+            <ul class="mobile-nav-list">
+                <li><a href="#hero" class="mobile-link"><i class="fa-solid fa-house"></i> Главная</a></li>
+                <li><a href="#about" class="mobile-link"><i class="fa-solid fa-crosshairs"></i> Об игре</a></li>
+                <li><a href="#mechanics" class="mobile-link"><i class="fa-solid fa-person-running"></i> Механики</a></li>
+                <li><a href="#factions" class="mobile-link"><i class="fa-solid fa-shield-halved"></i> Фракции</a></li>
+                <li><a href="#bestiary" class="mobile-link"><i class="fa-solid fa-skull"></i> Бестиарий</a></li>
+                <li><a href="#requirements" class="mobile-link"><i class="fa-solid fa-microchip"></i> Требования</a></li>
+            </ul>
+        </nav>
+        <div class="mobile-drawer-footer">
+            <div class="biomarker-compact">
+                <div class="biomarker-light pulse-uv"></div>
+                <span>Биомаркер: <strong id="mobile-bio-status">Стабилен (UV)</strong></span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Interactive HUD Widget: Biomarker Monitor -->
+    <div class="hud-biomarker" id="hud-biomarker" title="Персональный биомаркер заражения Эйдена">
+        <div class="biomarker-inner">
+            <div class="biomarker-sensor" id="bio-sensor"></div>
+            <div class="biomarker-data">
+                <span class="bio-label">ИММУНИТЕТ</span>
+                <div class="bio-bar-wrap">
+                    <div class="bio-bar" id="bio-bar"></div>
+                </div>
+                <span class="bio-timer" id="bio-timer">UV SAFE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <!-- HERO SECTION -->
+        <section id="hero" class="hero-section">
+            <div class="hero-bg-overlay"></div>
+            <div class="hero-grid-pattern" aria-hidden="true"></div>
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <div class="hero-badge reveal">
+                        <span class="pulse-dot"></span> ПОСЛЕДНИЙ ОПЛОТ ЧЕЛОВЕЧЕСТВА — ГОРОД ВИЛЛЕДОР
+                    </div>
+                    <h1 class="hero-title reveal">
+                        ОСТАВАЙТЕСЬ <span class="highlight-text neon-flicker">ЛЮДЬМИ</span> В МИРЕ ТЬМЫ
+                    </h1>
+                    <p class="hero-description reveal">
+                        Более 15 лет прошло с момента падения современной цивилизации. Вирус Харрана захватил планету, превратив города в смертоносные руины. Вы — Эйден Колдуэлл, странствующий Пилигрим, обладающий ловкостью и силой, чтобы изменить судьбу умирающего мегаполиса.
+                    </p>
+                    <div class="hero-actions reveal">
+                        <a href="#mechanics" class="btn btn-primary">
+                            <span>Исследовать механики</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#bestiary" class="btn btn-secondary">
+                            <i class="fa-solid fa-biohazard"></i>
+                            <span>Бестиарий заражённых</span>
+                        </a>
+                    </div>
+
+                    <!-- Live Game Stats Grid -->
+                    <div class="hero-stats-grid reveal">
+                        <div class="stat-card">
+                            <div class="stat-num">15+</div>
+                            <div class="stat-text">Лет после падения цивилизации</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-num">4×</div>
+                            <div class="stat-text">Больше площадь карты, чем в DL1</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-num">3000+</div>
+                            <div class="stat-text">Уникальных анимаций паркура</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-num">100%</div>
+                            <div class="stat-text">Свобода выбора союзников</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-scroll-indicator" aria-hidden="true">
+                <a href="#about" aria-label="Прокрутить вниз">
+                    <span class="mouse"></span>
+                    <span class="arrow-down"><i class="fa-solid fa-angles-down"></i></span>
+                </a>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="section about-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag"><i class="fa-solid fa-earth-americas"></i> СЕТТИНГ И ЛОР</span>
+                    <h2 class="section-title">ПАДЕНИЕ ЦИВИЛИЗАЦИИ И ГОРОД ВИЛЛЕДОР</h2>
+                    <div class="section-divider"></div>
+                    <p class="section-subtitle">
+                        История надежды, предательства и вечной борьбы за выживание на высоте десятков метров над землей.
+                    </p>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-card card reveal">
+                        <div class="card-icon"><i class="fa-solid fa-person-hiking"></i></div>
+                        <h3 class="card-title">Путь Пилигрима</h3>
+                        <p class="card-text">
+                            Главный герой — <strong>Эйден Колдуэлл</strong>. Он один из немногих Пилигримов — курьеров и странников, способных пересекать дикие зараженные пустоши между изолированными анклавами. Эйден приходит в Вилледор с глубоко личной целью: найти пропавшую сестру Мию и раскрыть тайны своего детства.
+                        </p>
+                        <div class="card-tag">Главный герой</div>
+                    </div>
+
+                    <div class="about-card card reveal">
+                        <div class="card-icon"><i class="fa-solid fa-city"></i></div>
+                        <h3 class="card-title">Современные Темные Века</h3>
+                        <p class="card-text">
+                            <strong>Вилледор</strong> — европейский мегаполис, переживший глобальную катастрофу благодаря изолирующим химическим бомбардировкам и стенам. Здесь люди научились жить заново: разбили сады на плоских крышах, наладили ветряные мельницы и протянули канатные дороги, оставив зачумленные улицы нежити.
+                        </p>
+                        <div class="card-tag">Открытый мир</div>
+                    </div>
+
+                    <div class="about-card card reveal">
+                        <div class="card-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                        <h3 class="card-title">Город Решений</h3>
+                        <p class="card-text">
+                            Вилледор разделен на два огромных региона: исторический <em>Старый Вилледор</em> и футуристический <em>Центральный Луп</em> с гигантскими небоскребами. Захватывая водонапорные башни и подстанции, вы лично решаете, кому передать контроль, что кардинально меняет облик улиц и инфраструктуру.
+                        </p>
+                        <div class="card-tag">Нелинейность</div>
+                    </div>
+                </div>
+
+                <!-- Lore Quote Callout -->
+                <div class="quote-callout card reveal">
+                    <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+                    <blockquote class="quote-text">
+                        «Днем город принадлежит людям, пусть и ожесточенным. Но когда садится солнце, улицы забирают истинные хозяева этого мира. Не задерживайся в темноте, Пилигрим. Оставайся человеком.»
+                    </blockquote>
+                    <cite class="quote-author">— Народная мудрость Базара, Старый Вилледор</cite>
+                </div>
+            </div>
+        </section>
+
+        <!-- MECHANICS SECTION -->
+        <section id="mechanics" class="section mechanics-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag"><i class="fa-solid fa-gamepad"></i> ГЕЙМПЛЕЙНЫЕ СИСТЕМЫ</span>
+                    <h2 class="section-title">ИННОВАЦИОННЫЕ МЕХАНИКИ ВЫЖИВАНИЯ</h2>
+                    <div class="section-divider"></div>
+                    <p class="section-subtitle">
+                        Симбиоз акробатики, брутальных контактных схваток и смертельного цикла смены времени суток.
+                    </p>
+                </div>
+
+                <div class="mechanics-tabs-wrapper reveal">
+                    <div class="mechanics-tab-buttons" role="tablist">
+                        <button class="mech-tab-btn active" data-tab="parkour" role="tab" aria-selected="true">
+                            <i class="fa-solid fa-person-running"></i>
+                            <span>Паркур и мобильность</span>
+                        </button>
+                        <button class="mech-tab-btn" data-tab="combat" role="tab" aria-selected="false">
+                            <i class="fa-solid fa-gavel"></i>
+                            <span>Боевая система и крафт</span>
+                        </button>
+                        <button class="mech-tab-btn" data-tab="cycle" role="tab" aria-selected="false">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                            <span>Цикл Дня и Ночи</span>
+                        </button>
+                    </div>
+
+                    <div class="mechanics-tab-content">
+                        <!-- Tab 1: Parkour -->
+                        <div class="mech-tab-panel active" id="tab-parkour" role="tabpanel">
+                            <div class="mech-panel-grid">
+                                <div class="mech-info">
+                                    <h3 class="mech-title">Вертикальный паркур без границ</h3>
+                                    <p class="mech-desc">
+                                        Система движения разработана с учетом реальной физики инерции и мышечной выносливости. Город превращается в гигантскую полосу препятствий, где каждый карниз, фонарь или натянутый провод — путь к спасению.
+                                    </p>
+                                    <ul class="mech-features-list">
+                                        <li>
+                                            <i class="fa-solid fa-check"></i>
+                                            <strong>Параплан (Paraglider):</strong> Позволяет планировать между небоскребами Центрального Лупа, набирая высоту над вентиляционными шахтами.
+                                        </li>
+                                        <li>
+                                            <i class="fa-solid fa-check"></i>
+                                            <strong>Крюк-кошка (Grappling Hook):</strong> Динамическая веревка для раскачивания над бездной и преодоления пропастей на огромной скорости.
+                                        </li>
+                                        <li>
+                                            <i class="fa-solid fa-check"></i>
+                                            <strong>Шкала выносливости (Stamina):</strong> Требует грамотного планирования подъема на высокие здания и выполнения сложных трюков.
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="mech-card-visual card">
+                                    <div class="hazard-stripes"></div>
+                                    <div class="hud-box">
+                                        <div class="hud-box-header">СИСТЕМА НАВЫКОВ ПАРКУРА</div>
+                                        <div class="skill-row">
+                                            <span>Бег по стенам (Tic-Tac)</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 90%;"></div></div>
+                                        </div>
+                                        <div class="skill-row">
+                                            <span>Мягкое приземление</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 100%;"></div></div>
+                                        </div>
+                                        <div class="skill-row">
+                                            <span>Прыжок с трамплина</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 80%;"></div></div>
+                                        </div>
+                                        <div class="skill-row">
+                                            <span>Дальний рывок (Dart)</span>
+                                            <div class="skill-bar"><div class="skill-fill" style="width: 85%;"></div></div>
+                                        </div>
+                                    </div>
+                                    <div class="hud-box-status"><i class="fa-solid fa-bolt"></i> МОБИЛЬНОСТЬ: ЭКСТРЕМАЛЬНАЯ</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2: Combat -->
+                        <div class="mech-tab-panel" id="tab-combat" role="tabpanel">
+                            <div class="mech-panel-grid">
+                                <div class="mech-info">
+                                    <h3 class="mech-title">Брутальный ближний бой и импровизация</h3>
+                                    <p class="mech-desc">
+                                        Огнестрельное оружие почти исчезло после падения мира. Выжившие полагаются на самодельные топоры, мачете, молоты и луки. Каждая схватка — это динамичный танец с уклонениями, блоками и использованием окружения.
+                                    </p>
+                                    <ul class="mech-features-list">
+                                        <li>
+                                            <i class="fa-solid fa-check"></i>
+                                            <strong>Паркур-атаки (Dropkick):</strong> Легендарный удар двумя ногами в полете, сбивающий врагов с крыш прямо на шипы.
+                                        </li>
+                                        <li>
+                                            <i class="fa-solid fa-check"></i>
+                                            <strong>Элементальные модификации:</strong> Встраивайте в клинки батареи для шока электричеством, баллоны с газом для огня или отравляющие лезвия.
+                                        </li>
+                                        <li>
+                                            <i class="fa-solid fa-check"></i>
+                                            <strong>UV-снаряжение:</strong> Ультрафиолетовые фонарики и файеры оглушают даже сильнейших монстров ночи.
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="mech-card-visual card">
+                                    <div class="hazard-stripes"></div>
+                                    <div class="hud-box">
+                                        <div class="hud-box-header">ТИПЫ УРОНА И МОДИФИКАЦИЙ</div>
+                                        <div class="combat-mod-badge mod-shock"><i class="fa-solid fa-bolt"></i> ШОК: Цепная молния</div>
+                                        <div class="combat-mod-badge mod-fire"><i class="fa-solid fa-fire"></i> ОГОНЬ: Воспламенение толпы</div>
+                                        <div class="combat-mod-badge mod-bleed"><i class="fa-solid fa-droplet"></i> КРОВОТЕЧЕНИЕ: Критический урон</div>
+                                        <div class="combat-mod-badge mod-uv"><i class="fa-solid fa-sun"></i> УФ-СВЕТ: Сжигание зараженных</div>
+                                    </div>
+                                    <div class="hud-box-status"><i class="fa-solid fa-shield"></i> ТАКТИКА: ВЫСОКАЯ ЖЕСТОКОСТЬ</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 3: Cycle -->
+                        <div class="mech-tab-panel" id="tab-cycle" role="tabpanel">
+                            <div class="mech-panel-grid">
+                                <div class="mech-info">
+                                    <h3 class="mech-title">Смертоносный дуализм: День и Ночь</h3>
+                                    <p class="mech-desc">
+                                        Смена времени суток кардинально меняет правила игры. Время в Вилледоре — это не просто смена освещения, это полная трансформация экосистемы города.
+                                    </p>
+                                    <ul class="mech-features-list">
+                                        <li>
+                                            <i class="fa-solid fa-check"></i>
+                                            <strong>День:</strong> Улицы относительно безопасны от зомби — большинство мутантов прячется в зданиях. Однако активны бандиты и ренегаты.
+                                        </li>
+                                        <li>
+                                            <i class="fa-solid fa-check"></i>
+                                            <strong>Ночь:</strong> На улицы выходят смертоносные Прыгуны (Volatiles). Запускается механика погони (Chase Level 1–4).
+                                        </li>
+                                        <li>
+                                            <i class="fa-solid fa-check"></i>
+                                            <strong>Тёмные зоны (Dark Hollows):</strong> Ночью зараженные покидают гнезда, открывая игроку доступ к военным контейнерам с редкими ингибиторами.
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="mech-card-visual card">
+                                    <div class="hazard-stripes"></div>
+                                    <div class="chase-meter-box">
+                                        <div class="chase-meter-title">УРОВЕНЬ ПОГОНИ (CHASE LEVEL)</div>
+                                        <div class="chase-ranks">
+                                            <span class="chase-rank active">1</span>
+                                            <span class="chase-rank active">2</span>
+                                            <span class="chase-rank active">3</span>
+                                            <span class="chase-rank active">4</span>
+                                        </div>
+                                        <p class="chase-alert"><i class="fa-solid fa-triangle-exclamation"></i> ВНИМАНИЕ: На 4 уровне в погоню вступают альфа-хищники</p>
+                                    </div>
+                                    <div class="hud-box-status uv-status"><i class="fa-solid fa-shield-virus"></i> СПАСЕНИЕ: БЕГИТЕ К UV-ЛАМПАМ</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FACTIONS SECTION -->
+        <section id="factions" class="section factions-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag"><i class="fa-solid fa-people-group"></i> ПОЛИТИЧЕСКАЯ КАРТА</span>
+                    <h2 class="section-title">ФРАКЦИИ ГОРОДА: ВЫБОР ЗА ВАМИ</h2>
+                    <div class="section-divider"></div>
+                    <p class="section-subtitle">
+                        Кому доверить будущее Вилледора? Каждое решение дает уникальные бонусы выживания.
+                    </p>
+                </div>
+
+                <div class="factions-grid">
+                    <!-- Faction 1: Survivors -->
+                    <article class="faction-card card card-survivors reveal">
+                        <div class="faction-badge"><i class="fa-solid fa-seedling"></i> СВОБОДА</div>
+                        <div class="faction-header">
+                            <div class="faction-icon icon-survivors"><i class="fa-solid fa-person-shelter"></i></div>
+                            <div>
+                                <h3 class="faction-name">Выжившие (Survivors)</h3>
+                                <span class="faction-hq">База: Базар (The Bazaar)</span>
+                            </div>
+                        </div>
+                        <p class="faction-desc">
+                            Обычные жители, ремесленники и торговцы, объединенные идеалами демократии и свободы. Они не хотят военной тирании и стремятся возродить сообщество, выращивая еду на крышах и развивая городскую культуру.
+                        </p>
+                        <div class="faction-bonuses">
+                            <h4>Награды за районы:</h4>
+                            <ul>
+                                <li><i class="fa-solid fa-check"></i> Канатные тросы (Ziplines) между крышами</li>
+                                <li><i class="fa-solid fa-check"></i> Подушки безопасности и батуты при падении</li>
+                                <li><i class="fa-solid fa-check"></i> Вентиляционные гейзеры для параплана</li>
+                            </ul>
+                        </div>
+                        <button class="faction-select-btn" data-faction="survivors">Выбрать путь Выживших</button>
+                    </article>
+
+                    <!-- Faction 2: Peacekeepers -->
+                    <article class="faction-card card card-peacekeepers reveal">
+                        <div class="faction-badge"><i class="fa-solid fa-shield-halved"></i> ПОРЯДОК</div>
+                        <div class="faction-header">
+                            <div class="faction-icon icon-pk"><i class="fa-solid fa-handcuffs"></i></div>
+                            <div>
+                                <h3 class="faction-name">Миротворцы (Peacekeepers)</h3>
+                                <span class="faction-hq">База: Плавучая крепость (Метро)</span>
+                            </div>
+                        </div>
+                        <p class="faction-desc">
+                            Жестко структурированная военизированная организация. Их цель — закон и порядок любой ценой. Одетые в синюю униформу, солдаты ПК безжалостно уничтожают преступников и организуют непреклонную оборону от зараженных.
+                        </p>
+                        <div class="faction-bonuses">
+                            <h4>Награды за районы:</h4>
+                            <ul>
+                                <li><i class="fa-solid fa-check"></i> Автомобильные ловушки-взрывчатки</li>
+                                <li><i class="fa-solid fa-check"></i> Автоматические УФ-турели и шипы</li>
+                                <li><i class="fa-solid fa-check"></i> Полуавтоматический арбалет ПК (PK Crossbow)</li>
+                            </ul>
+                        </div>
+                        <button class="faction-select-btn" data-faction="peacekeepers">Выбрать путь Миротворцев</button>
+                    </article>
+
+                    <!-- Faction 3: Renegades -->
+                    <article class="faction-card card card-renegades reveal">
+                        <div class="faction-badge"><i class="fa-solid fa-skull-crossbones"></i> СИЛА</div>
+                        <div class="faction-header">
+                            <div class="faction-icon icon-renegades"><i class="fa-solid fa-mask"></i></div>
+                            <div>
+                                <h3 class="faction-name">Ренегаты (Renegades)</h3>
+                                <span class="faction-hq">База: Цитадель полковника Уильямса</span>
+                            </div>
+                        </div>
+                        <p class="faction-desc">
+                            Банда бывших заключенных и дезертиров под началом безжалостного «Мясника» (полковника Уильямса). Они верят исключительно в право сильного, контролируют дамбы и без колебаний терроризируют все мирное население.
+                        </p>
+                        <div class="faction-bonuses">
+                            <h4>Особенности фракции:</h4>
+                            <ul>
+                                <li><i class="fa-solid fa-skull"></i> Безжалостные вооруженные мародеры</li>
+                                <li><i class="fa-solid fa-skull"></i> Контроль над тяжелой военной техникой</li>
+                                <li><i class="fa-solid fa-skull"></i> Главные противники стабильности в городе</li>
+                            </ul>
+                        </div>
+                        <button class="faction-select-btn" data-faction="renegades">Враждебная группировка</button>
+                    </article>
+                </div>
+
+                <!-- City Alignment Interactive Simulator -->
+                <div class="city-alignment-box card reveal">
+                    <h3 class="alignment-title"><i class="fa-solid fa-sliders"></i> ИНТЕРАКТИВНОЕ ВЛИЯНИЕ НА ГОРОД</h3>
+                    <p class="alignment-desc">Перетащите ползунок, чтобы увидеть, как распределение объектов между фракциями меняет игровой процесс:</p>
+                    <div class="slider-control-row">
+                        <span class="slider-side-label"><i class="fa-solid fa-seedling"></i> ВЫЖИВШИЕ</span>
+                        <input type="range" id="alignment-slider" min="0" max="100" value="50" class="alignment-range" aria-label="Баланс фракций">
+                        <span class="slider-side-label"><i class="fa-solid fa-shield-halved"></i> МИРОТВОРЦЫ</span>
+                    </div>
+                    <div class="alignment-result" id="alignment-result">
+                        <span class="result-badge" id="alignment-badge">Сбалансированный город</span>
+                        <p class="result-text" id="alignment-text">В городе поровну распределены средства паркурной мобильности и защитные ловушки Миротворцев.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BESTIARY SECTION -->
+        <section id="bestiary" class="section bestiary-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag"><i class="fa-solid fa-biohazard"></i> ИССЛЕДОВАНИЕ ЗАРАЖЕННЫХ</span>
+                    <h2 class="section-title">ИНТЕРАКТИВНЫЙ БЕСТИАРИЙ ВИРУСА THV</h2>
+                    <div class="section-divider"></div>
+                    <p class="section-subtitle">
+                        Мутации Харранского вируса разделили зараженных на классы. Изучите их повадки и уязвимости, чтобы выжить.
+                    </p>
+                </div>
+
+                <!-- Bestiary Filter Buttons -->
+                <div class="bestiary-filters reveal">
+                    <button class="filter-btn active" data-filter="all">Все зараженные</button>
+                    <button class="filter-btn" data-filter="day">Дневные виды</button>
+                    <button class="filter-btn" data-filter="night">Ночные охотники</button>
+                    <button class="filter-btn" data-filter="boss">Специальные мутанты</button>
+                </div>
+
+                <!-- Bestiary Cards Grid -->
+                <div class="bestiary-grid">
+                    <!-- Monster 1: Biter -->
+                    <div class="zombie-card card reveal" data-category="day">
+                        <div class="zombie-threat threat-low">Угроза: <i class="fa-solid fa-skull"></i> 1/5</div>
+                        <div class="zombie-avatar">
+                            <i class="fa-solid fa-user-injured"></i>
+                        </div>
+                        <h3 class="zombie-name">Кусака (Biter)</h3>
+                        <div class="zombie-habitat"><i class="fa-solid fa-sun"></i> Время активности: Круглые сутки</div>
+                        <p class="zombie-summary">
+                            Медлительные, разлагающиеся зомби. На солнечном свету вялы и почти слепы, но в узких переулках и помещениях берут числом.
+                        </p>
+                        <div class="zombie-traits">
+                            <span class="trait-tag"><i class="fa-solid fa-shield"></i> Слабость: Обезглавливание</span>
+                            <span class="trait-tag"><i class="fa-solid fa-sun"></i> Боязнь УФ: Средняя</span>
+                        </div>
+                        <button class="zombie-expand-btn" aria-expanded="false">Подробное досье <i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="zombie-detailed-info" hidden>
+                            <p><strong>Тактика противодействия:</strong> Легко обходятся по крышам. В бою рекомендуется использовать паркурные перепрыгивания и удары по ногам.</p>
+                            <p><strong>Лут:</strong> Базовые трофеи зараженных, ткань, металлолом.</p>
+                        </div>
+                    </div>
+
+                    <!-- Monster 2: Viral -->
+                    <div class="zombie-card card reveal" data-category="day night">
+                        <div class="zombie-threat threat-med">Угроза: <i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i> 2/5</div>
+                        <div class="zombie-avatar">
+                            <i class="fa-solid fa-person-running"></i>
+                        </div>
+                        <h3 class="zombie-name">Вирусный (Viral)</h3>
+                        <div class="zombie-habitat"><i class="fa-solid fa-bell"></i> Привлекается шумом</div>
+                        <p class="zombie-summary">
+                            Недавно зараженные люди. Сохранили человеческую скорость, ловко взбираются на крыши и преследуют жертву на полной скорости.
+                        </p>
+                        <div class="zombie-traits">
+                            <span class="trait-tag"><i class="fa-solid fa-bolt"></i> Высокая скорость</span>
+                            <span class="trait-tag"><i class="fa-solid fa-sun"></i> Боязнь УФ: Сильная</span>
+                        </div>
+                        <button class="zombie-expand-btn" aria-expanded="false">Подробное досье <i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="zombie-detailed-info" hidden>
+                            <p><strong>Тактика противодействия:</strong> Появляются при взрывах или падении с высоты. Рекомендуется встречать их на краю крыши ударом Dropkick в пропасть.</p>
+                            <p><strong>Лут:</strong> Редкие трофеи зараженных, ингибиторные частицы.</p>
+                        </div>
+                    </div>
+
+                    <!-- Monster 3: Volatile (Alpha) -->
+                    <div class="zombie-card card monster-highlight reveal" data-category="night">
+                        <div class="zombie-threat threat-fatal">Угроза: <i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i> 5/5</div>
+                        <div class="zombie-avatar uv-glow">
+                            <i class="fa-solid fa-ghost"></i>
+                        </div>
+                        <h3 class="zombie-name">Прыгун (Volatile)</h3>
+                        <div class="zombie-habitat"><i class="fa-solid fa-moon"></i> Время активности: Только ночь</div>
+                        <p class="zombie-summary">
+                            Вершина эволюции вируса THV. Невероятно быстрый, выносливый хищник с расщепленной челюстью и бронированной кожей. Смертелен в открытом бою.
+                        </p>
+                        <div class="zombie-traits">
+                            <span class="trait-tag danger"><i class="fa-solid fa-skull"></i> Альфа-хищник</span>
+                            <span class="trait-tag uv-trait"><i class="fa-solid fa-sun"></i> Уязвимость: Только UV-свет</span>
+                        </div>
+                        <button class="zombie-expand-btn" aria-expanded="false">Подробное досье <i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="zombie-detailed-info" hidden>
+                            <p><strong>Тактика противодействия:</strong> Прямой бой крайне рискован. Используйте УФ-фонарь для кратковременного ослепления и немедленно отступайте в ближайшее УФ-убежище.</p>
+                            <p><strong>Лут:</strong> Уникальные трофеи для максимального улучшения чертежей оружия.</p>
+                        </div>
+                    </div>
+
+                    <!-- Monster 4: Bomber -->
+                    <div class="zombie-card card reveal" data-category="boss">
+                        <div class="zombie-threat threat-high">Угроза: <i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i> 3/5</div>
+                        <div class="zombie-avatar">
+                            <i class="fa-solid fa-burst"></i>
+                        </div>
+                        <h3 class="zombie-name">Бомбардир (Bomber)</h3>
+                        <div class="zombie-habitat"><i class="fa-solid fa-radiation"></i> Темные зоны / Подземелья</div>
+                        <p class="zombie-summary">
+                            Раздутый мутант, наполненный токсичными газами. Бежит на жертву и взрывается, нанося смертельный урон по площади и привлекая вирусных.
+                        </p>
+                        <div class="zombie-traits">
+                            <span class="trait-tag"><i class="fa-solid fa-bomb"></i> Детонация при контакте</span>
+                            <span class="trait-tag"><i class="fa-solid fa-bullseye"></i> Дистанционный урон</span>
+                        </div>
+                        <button class="zombie-expand-btn" aria-expanded="false">Подробное досье <i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="zombie-detailed-info" hidden>
+                            <p><strong>Тактика противодействия:</strong> Уничтожайте издалека метательными ножами или стрелами из лука. Не подпускайте в ближний бой!</p>
+                            <p><strong>Лут:</strong> Химикаты, взрывчатые ингредиенты.</p>
+                        </div>
+                    </div>
+
+                    <!-- Monster 5: Demolisher -->
+                    <div class="zombie-card card reveal" data-category="boss">
+                        <div class="zombie-threat threat-high">Угроза: <i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i> 4/5</div>
+                        <div class="zombie-avatar">
+                            <i class="fa-solid fa-shield-cat"></i>
+                        </div>
+                        <h3 class="zombie-name">Громила (Demolisher)</h3>
+                        <div class="zombie-habitat"><i class="fa-solid fa-city"></i> Военные конвои / Площади</div>
+                        <p class="zombie-summary">
+                            Гигантский мутировавший зараженный в остатках полицейской или военной брони. Сокрушает препятствия и швыряет многотонные куски бетона.
+                        </p>
+                        <div class="zombie-traits">
+                            <span class="trait-tag"><i class="fa-solid fa-shield"></i> Тяжелая броня</span>
+                            <span class="trait-tag"><i class="fa-solid fa-car-crash"></i> Таранная атака</span>
+                        </div>
+                        <button class="zombie-expand-btn" aria-expanded="false">Подробное досье <i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="zombie-detailed-info" hidden>
+                            <p><strong>Тактика противодействия:</strong> Провоцируйте его на таран в стены или колонны. В момент оглушения сбивайте броню со спины и головы.</p>
+                            <p><strong>Лут:</strong> Военные трофеи, высокоуровневые детали крафта.</p>
+                        </div>
+                    </div>
+
+                    <!-- Monster 6: Revenant -->
+                    <div class="zombie-card card reveal" data-category="night boss">
+                        <div class="zombie-threat threat-high">Угроза: <i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i><i class="fa-solid fa-skull"></i> 4/5</div>
+                        <div class="zombie-avatar">
+                            <i class="fa-solid fa-dna"></i>
+                        </div>
+                        <h3 class="zombie-name">Ревенант (Revenant)</h3>
+                        <div class="zombie-habitat"><i class="fa-solid fa-skull"></i> Зоны химических аномалий ВГМ</div>
+                        <p class="zombie-summary">
+                            Загадочный крылатый мутант, встречающийся только ночью в зонах аномалий GRE. Выделяет химический туман, усиливающий всех окружающих зараженных.
+                        </p>
+                        <div class="zombie-traits">
+                            <span class="trait-tag"><i class="fa-solid fa-cloud"></i> Токсичный туман</span>
+                            <span class="trait-tag"><i class="fa-solid fa-users-viewfinder"></i> Призыв подкреплений</span>
+                        </div>
+                        <button class="zombie-expand-btn" aria-expanded="false">Подробное досье <i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="zombie-detailed-info" hidden>
+                            <p><strong>Тактика противодействия:</strong> Фокусируйте урон исключительно на Ревенанте, избегая призванных им кусак. Уязвим к огненным стрелам.</p>
+                            <p><strong>Лут:</strong> Военные ингибиторы ВГМ для прокачки здоровья и выносливости.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SYSTEM REQUIREMENTS SECTION -->
+        <section id="requirements" class="section requirements-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag"><i class="fa-solid fa-desktop"></i> ТЕХНИЧЕСКАЯ ИНФОРМАЦИЯ</span>
+                    <h2 class="section-title">СИСТЕМНЫЕ ТРЕБОВАНИЯ ДЛЯ ПК</h2>
+                    <div class="section-divider"></div>
+                    <p class="section-subtitle">
+                        Оптимизация движка C-Engine обеспечивает плавную частоту кадров как на базовых ПК, так и в 4K с Ray Tracing.
+                    </p>
+                </div>
+
+                <!-- Requirements Tab Switcher -->
+                <div class="req-tabs-switcher reveal">
+                    <button class="req-mode-btn active" data-req="standard">Стандартная графика (Без трассировки)</button>
+                    <button class="req-mode-btn" data-req="raytracing">Трассировка лучей (Ray Tracing)</button>
+                </div>
+
+                <!-- Standard Table -->
+                <div class="req-table-container card reveal active" id="req-standard">
+                    <table class="req-table">
+                        <thead>
+                            <tr>
+                                <th>Параметр</th>
+                                <th>Минимальные (1080p, 30 FPS, Низкие)</th>
+                                <th>Рекомендуемые (1080p, 60 FPS, Высокие)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><i class="fa-brands fa-windows"></i> Операционная система</td>
+                                <td>Windows 10 / 11 (64-bit)</td>
+                                <td>Windows 10 / 11 (64-bit)</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-microchip"></i> Процессор (CPU)</td>
+                                <td>Intel Core i3-9100 / AMD Ryzen 3 2300X</td>
+                                <td>Intel Core i5-8600K / AMD Ryzen 5 3600X</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-memory"></i> Оперативная память (RAM)</td>
+                                <td>8 ГБ</td>
+                                <td>16 ГБ Dual Channel</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-tv"></i> Видеокарта (GPU)</td>
+                                <td>NVIDIA GeForce GTX 1050 Ti / AMD Radeon RX 560 (4GB)</td>
+                                <td>NVIDIA GeForce RTX 2060 (6GB) / AMD Radeon RX Vega 56</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-hard-drive"></i> Место на диске</td>
+                                <td>60 ГБ свободного места (HDD поддерживается)</td>
+                                <td>60 ГБ свободного места (Строго рекомендован SSD)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Ray Tracing Table -->
+                <div class="req-table-container card reveal" id="req-raytracing">
+                    <table class="req-table">
+                        <thead>
+                            <tr>
+                                <th>Параметр</th>
+                                <th>RT Низкие (1080p, 30 FPS, Ray Tracing On)</th>
+                                <th>RT Ультра (1080p / 1440p, 60 FPS, Ray Tracing High)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><i class="fa-brands fa-windows"></i> Операционная система</td>
+                                <td>Windows 10 / 11 (64-bit)</td>
+                                <td>Windows 10 / 11 (64-bit)</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-microchip"></i> Процессор (CPU)</td>
+                                <td>Intel Core i5-8600K / AMD Ryzen 5 3600X</td>
+                                <td>Intel Core i7-8700K / AMD Ryzen 7 3700X</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-memory"></i> Оперативная память (RAM)</td>
+                                <td>16 ГБ</td>
+                                <td>16 ГБ / 32 ГБ Dual Channel</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-tv"></i> Видеокарта (GPU)</td>
+                                <td>NVIDIA GeForce RTX 2070 (8GB)</td>
+                                <td>NVIDIA GeForce RTX 3080 (10GB) / AMD Radeon RX 6800 XT</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-hard-drive"></i> Место на диске</td>
+                                <td>60 ГБ SSD (Высокоскоростной NVMe)</td>
+                                <td>60 ГБ SSD (Высокоскоростной NVMe)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="footer" class="site-footer">
+        <div class="container footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="logo-link">
+                        <div class="logo-badge">DL2</div>
+                        <div class="logo-text">
+                            <span class="logo-title">DYING LIGHT 2</span>
+                            <span class="logo-subtitle">STAY HUMAN</span>
+                        </div>
+                    </div>
+                    <p class="footer-desc">
+                        Неофициальный тематический веб-портал, разработанный в качестве курсового проекта по веб-разработке. Все товарные знаки и графические образы принадлежат Techland S.A.
+                    </p>
+                    <div class="footer-socials">
+                        <a href="https://twitter.com/DyingLightGame" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="https://www.youtube.com/@DyingLightGameOfficial" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="https://discord.com/invite/dyinglight" target="_blank" rel="noopener noreferrer" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+                        <a href="https://store.steampowered.com/app/534380/Dying_Light_2_Stay_Human/" target="_blank" rel="noopener noreferrer" aria-label="Steam"><i class="fa-brands fa-steam"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4 class="footer-col-title">Навигация</h4>
+                    <ul>
+                        <li><a href="#hero">Главная страница</a></li>
+                        <li><a href="#about">О сеттинге и сюжете</a></li>
+                        <li><a href="#mechanics">Паркур и боевая система</a></li>
+                        <li><a href="#factions">Фракции города</a></li>
+                        <li><a href="#bestiary">Бестиарий зомби</a></li>
+                        <li><a href="#requirements">Системные требования</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4 class="footer-col-title">О проекте</h4>
+                    <ul>
+                        <li><span class="footer-info-item"><i class="fa-solid fa-graduation-cap"></i> Курсовой проект: Веб-дизайн</span></li>
+                        <li><span class="footer-info-item"><i class="fa-solid fa-code"></i> Стек: HTML5, CSS3, ES6+ JS</span></li>
+                        <li><span class="footer-info-item"><i class="fa-solid fa-shield-virus"></i> Тема: Адаптивный UV-интерфейс</span></li>
+                        <li><span class="footer-info-item"><i class="fa-solid fa-calendar-days"></i> Год разработки: 2026</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 Dying Light 2: Stay Human Fan Project. Создано для академической демонстрации.</p>
+                <div class="footer-stay-human">
+                    <span class="neon-warning">STAY HUMAN // GOOD NIGHT & GOOD LUCK</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top-btn" aria-label="Вернуться наверх" title="Наверх">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+</body>
+</html>
